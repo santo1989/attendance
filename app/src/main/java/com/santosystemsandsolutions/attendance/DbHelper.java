@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 
 import androidx.annotation.Nullable;
+import androidx.room.Query;
 
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -33,9 +34,9 @@ public class DbHelper extends SQLiteOpenHelper {
 //Student information Table
 
     private static final String STUDENT_TABLE_NAME = "STUDENT_TABLE";
-    private static final String S_ID = "_SID";
-    private static final String STUDENT_NAME_KEY = "STUDENT_NAME";
-    private static final String STUDENT_ROLL_KEY = "ROLL";
+    public static final String S_ID = "_SID";
+    public static final String STUDENT_NAME_KEY = "STUDENT_NAME";
+    public static final String STUDENT_ROLL_KEY = "ROLL";
     private static final String CREATE_STUDENT_TABLE =
             " CREATE TABLE " + STUDENT_TABLE_NAME + "(" +
                     S_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
@@ -52,9 +53,9 @@ public class DbHelper extends SQLiteOpenHelper {
     //Status information Table
 
     private static final String STATUS_TABLE_NAME = "STATUS_TABLE";
-    private static final String STATUS_ID = "_STATUS_ID";
-    private static final String DATE_KEY = "STATUS_DATE";
-    private static final String STATUS_KEY = "STATUS";
+    public static final String STATUS_ID = "_STATUS_ID";
+    public static final String DATE_KEY = "STATUS_DATE";
+    public static final String STATUS_KEY = "STATUS";
     private static final String CREATE_STATUS_TABLE =
             " CREATE TABLE " + STATUS_TABLE_NAME +
                     "(" +
@@ -92,6 +93,7 @@ public class DbHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
+    //Class CRUD
     long addClass(String className,String subjectName){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -118,6 +120,36 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put(CLASS_NAME_KEY,className);
         values.put(SUBJECT_NAME_KEY,subjectName);
         return database.update(CLASS_TABLE_NAME,values, C_ID+"=?", new String[]{String.valueOf(cid)});
+    }
+//student CRUD
+
+    long addStudent(long cid, int roll, String name){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(C_ID,cid);
+        values.put(STUDENT_ROLL_KEY, roll);
+        values.put(STUDENT_NAME_KEY, name);
+        return database.insert(STUDENT_TABLE_NAME,null,values);
+
+    }
+
+    Cursor getStudentTable(long cid){
+        SQLiteDatabase database = this.getReadableDatabase();
+        return database.query(STUDENT_TABLE_NAME, null, C_ID+"=?", new String[]{String.valueOf(cid)},null, null, STUDENT_ROLL_KEY);
+
+
+    }
+
+    int deleteStudent(long sid){
+        SQLiteDatabase database = this.getReadableDatabase();
+        return database.delete(STUDENT_TABLE_NAME , S_ID+"=?", new String[]{String.valueOf(sid)});
+    }
+
+    long updateStudent(long sid,String name){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(STUDENT_NAME_KEY,name);
+        return database.update(STUDENT_TABLE_NAME,values, S_ID+"=?", new String[]{String.valueOf(sid)});
     }
 
 

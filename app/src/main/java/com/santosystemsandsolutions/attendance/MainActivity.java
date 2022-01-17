@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("className", classitems.get(position).getClassName());
         intent.putExtra("subjectName", classitems.get(position).getSubjectName());
         intent.putExtra("position", position);
+        intent.putExtra("cid", classitems.get(position).getCid());
         startActivity(intent);
 
     }
