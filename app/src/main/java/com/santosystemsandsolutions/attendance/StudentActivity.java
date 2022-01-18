@@ -27,6 +27,8 @@ public class StudentActivity extends AppCompatActivity {
     private ArrayList<StudentItem> studentItems= new ArrayList<>();
     private DbHelper dbHelper;
     private long cid;
+    private MyCalender calender;
+    private  TextView subtitle;
 
 
     @Override
@@ -34,13 +36,14 @@ public class StudentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
+        calender = new MyCalender();
         dbHelper = new DbHelper(this);
         Intent intent = getIntent();
         className= intent.getStringExtra("className");
         subjectName= intent.getStringExtra("subjectName");
         position = intent.getIntExtra("position",-1);
         cid = intent.getLongExtra("cid",-1);
-
+        //subtitle = toolbar.findViewById(R.id.subtitle_toolbar);
 
         SetToolbar();
 
@@ -85,12 +88,13 @@ cursor.close();
 
         toolbar = findViewById(R.id.toolbar);
         TextView title = toolbar.findViewById(R.id.title_toolbar);
-        TextView subtitle = toolbar.findViewById(R.id.subtitle_toolbar);
+//        TextView subtitle = toolbar.findViewById(R.id.subtitle_toolbar);
+        subtitle = toolbar.findViewById(R.id.subtitle_toolbar);
         ImageButton back = toolbar.findViewById(R.id.back);
         ImageButton save = toolbar.findViewById(R.id.save);
 
         title.setText(className);
-        subtitle.setText(subjectName);
+        subtitle.setText(subjectName+" | "+calender.getDate());
         //subtitle.setVisibility(View.INVISIBLE);
         back.setOnClickListener(v->onBackPressed());
         //save.setVisibility(View.INVISIBLE);
@@ -103,9 +107,25 @@ cursor.close();
     private boolean onMenuItemClick(MenuItem menuItem) {
         if(menuItem.getItemId()==R.id.add_student){
             showAddStudentDialog();
+        }else if(menuItem.getItemId()==R.id.show_Calender){
+            showCalander();
         }
 
         return true;
+    }
+
+    private void showCalander() {
+        //MyCalender calender = new MyCalender();
+        calender.show(getSupportFragmentManager(),"");
+        calender.setOnCalenderOkClickLisener(this::onCalendarOkClicked);
+
+    }
+
+    private void onCalendarOkClicked(int year, int month, int day) {
+        calender.setDate(year,month,day);
+            //calender.setDay(year, month, day);
+            //subtitle.setText(calender.getDay());
+        subtitle.setText(subjectName+" | "+calender.getDate());
     }
 
     private void showAddStudentDialog() {
@@ -126,11 +146,11 @@ cursor.close();
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-        case 0:
-            showUpdateStudentDialog(item.getGroupId());
-            break;
-        case 1:
-            deleteStudent(item.getGroupId());
+                case 0:
+                    showUpdateStudentDialog(item.getGroupId());
+                    break;
+                case 1:
+                    deleteStudent(item.getGroupId());
         }
         return super.onContextItemSelected(item);
     }

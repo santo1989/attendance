@@ -73,9 +73,10 @@ public class MyDialog extends DialogFragment {
         Button cancel = view.findViewById(R.id.cancel_btn);
         Button add = view.findViewById(R.id.add_btn);
         add.setText("Update");
-        roll_edt.setText(roll+" ");
+        roll_edt.setText(roll+"");
         roll_edt.setEnabled(false);
         name_edt.setText(name);
+
         cancel.setOnClickListener(v -> dismiss());
 
         add.setOnClickListener(v -> {

@@ -7,7 +7,7 @@ public class StudentItem {
     private String status;
 
     public StudentItem(long sid, int roll, String name){
-        this.sid = this.sid;
+        this.sid = sid;
         this.roll= roll;
         this.name = name;
         status="";

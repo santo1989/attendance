@@ -4,5 +4,8 @@
     <item
         android:id="@+id/add_student"
         android:title="ADD Student"/>
+    <item
+        android:id="@+id/show_Calender"
+        android:title="Change Date"/>
 
 </menu>
